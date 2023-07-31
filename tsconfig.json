@@ -1,0 +1,16 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "noEmitOnError": true, // Modified base commenting this option out
+  "compilerOptions": {
+    "target": "ES2019",
+    "rootDir": ".",
+    "outDir": "misc/build",
+    // To create .d.ts files with tsc:
+    //  - Comment out "noEmitOnError": true above
+    //  - Uncomment "emitDeclarationOnly": true below
+    // "emitDeclarationOnly": true,
+  },
+  "include": [
+    "GAS/**/*.ts"
+    ]
+}
