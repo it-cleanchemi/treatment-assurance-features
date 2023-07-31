@@ -1,0 +1,34 @@
+{
+  "name": "treatment-assurance-features",
+  "version": "1.0.0",
+  "description": "Manage automated features for operators",
+  "dependencies": {
+    "@types/google-apps-script": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/it-cleanchemi/treatment-assurance-features.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/it-cleanchemi/treatment-assurance-features/issues"
+  },
+  "homepage": "https://github.com/it-cleanchemi/treatment-assurance-features#readme",
+  "devDependencies": {
+    "@types/node": "^14.11.2",
+    "gts": "^3.1.0",
+    "typescript": "^4.0.3"
+  }
+}
