@@ -1,4 +1,4 @@
-//Revision 7/21/2023 - with emailing stage report for Sabine
+//Revision 8/1/2023...
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
@@ -98,16 +98,6 @@ function sendREPORT() {
         } 
       }
   }
-  var emailRecipientsRange = SS.getSheetByName('Reference').getRange("N2:N15");
-  var emailRecipients = emailRecipientsRange.getValues().flat().filter(email => email !== "");
-  var subject = "--Clean Chemistry Stage Report-- Well: "+rowData[5]+" Stage: "+rowData[6]; // Specify the subject of the email
-
-  MailApp.sendEmail({
-    to: emailRecipients.join(','),
-    subject: subject,
-    body: message,
-  });
-
 }
 
 function postShiftReport(){
