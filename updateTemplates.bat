@@ -14,4 +14,6 @@ FOR /F "tokens=1,2 delims=:" %%A in (ScriptIDList.txt) do (
     clasp push --force
 )
 
+source.clasp.json > .clasp.json
+
 exit
