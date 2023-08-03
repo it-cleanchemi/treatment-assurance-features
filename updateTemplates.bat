@@ -11,9 +11,8 @@ FOR /F "tokens=1,2 delims=:" %%A in (ScriptIDList.txt) do (
         ECHO }
     )> .clasp.json
 
-    clasp push --force
+    CALL clasp push --force
 )
 
-source.clasp.json > .clasp.json
-
-exit
+ECHO Copying Source File
+COPY source.clasp.json .clasp.json
