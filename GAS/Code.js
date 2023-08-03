@@ -1,5 +1,5 @@
+//Revision 8/03/2023 - with emailing stage report
 
-//Revision 7/21/2023 - with emailing stage report for Sabine
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
 var activeRow = activeCell.getRow();
