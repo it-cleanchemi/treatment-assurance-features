@@ -21,6 +21,7 @@ function sendREPORT() {
         for (var i = 0; i < REPORT.length; i++) {
             var header = REPORT[i][0]; // Access the header value from the nested array
             var value = rowData[headerValues.indexOf(header)]; // Find the corresponding value based on the header
+            header = header.replace("🔒", "").trim(); // removes pad locks from header
             if (value !== null && value !== "") {
                 if (value instanceof Date) {
                     var hours = value.getHours();
