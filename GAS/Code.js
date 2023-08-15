@@ -1,4 +1,4 @@
-//Revision 8/03/2023 - with emailing stage report -- 
+//Revision 8/15/2023 - with emailing stage report -With CARD FORMATTING- 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
@@ -12,39 +12,48 @@ const WEBHOOK = SS.getSheetByName('Reference').getRange("L2").getValues();
 function sendREPORT() {
     var reportSentColumnIndex = headerValues.indexOf("Report Sent") + 1;
     var referenceSheet = SS.getSheetByName('Reference');
-    var lastReportRow = referenceSheet.getRange("M:M").getValues().filter(String).length;
+    var lastReportRow = getLastDataRowInColumn(referenceSheet, 13); // Assuming column M is the 13th column
     var REPORT = referenceSheet.getRange("M2:M" + lastReportRow).getValues();
     for (var i = 0; i < rowValues.length; i++) {
         var rowData = rowValues[i];
-        var message = "-Stage Report-\n";
+        var message = "<p style='font-size: 11px;'>";
         var missingValues = [];
         for (var i = 0; i < REPORT.length; i++) {
             var header = REPORT[i][0]; // Access the header value from the nested array
             var value = rowData[headerValues.indexOf(header)]; // Find the corresponding value based on the header
             header = header.replace("🔒", "").trim(); // removes pad locks from header
+            
+
+            if (header ===""){
+             message += "<br>";
+            }else{  
+            var paddingSpaces = calculatePaddingSpaces(32 - header.length);  
             if (value !== null && value !== "") {
                 if (value instanceof Date) {
                     var hours = value.getHours();
                     var minutes = value.getMinutes();
                     var localTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
-                    message += header + ":\t\t" + localTime + "\n";
+                    message += header + ":" + paddingSpaces + "<b>"+ "<font color=\"#0000FF\">" + localTime +"</b>"+ "<font color=\"#000000\">"+ "<br>";
                 }
                 else if (typeof value === 'number') {
                     var trimmedValue = value;
                     if (value % 1 !== 0) { // Check if the value has decimals
                         trimmedValue = value.toFixed(1); // Trim all decimals except one
                     }
-                    message += header + ":\t\t" + trimmedValue + "\n";
+                    message += header + ":" + paddingSpaces + "<b>"+trimmedValue+"</b>" + "<br>";
                 }
                 else {
                     //   Compose the message with right-aligned header and value
-                    message += header + ":\t\t" + value + "\n";
+                    message += header + ":" + paddingSpaces + "<b>"+ value +"</b>"+ "<br>";
                 }
             }
             else {
                 missingValues.push(header); // Add the missing value header to the array
             }
+            }
+        Logger.log(message);
         }
+        message=message+"</p>";
         var reportSent = rowData[headerValues.indexOf("Report Sent")];
         var date = new Date();
         var repDay = date.getDate();
@@ -100,7 +109,7 @@ function sendREPORT() {
      MailApp.sendEmail({
         to: emailRecipients.join(','),
         subject: subject,
-        body: message,
+        htmlBody: message,
         });
     } catch{
       
@@ -285,15 +294,36 @@ function postShiftReport() {
         payload: JSON.stringify(payload)
     };
     var url = WEBHOOK;
-    var response = UrlFetchApp.fetch(url, options);
+    UrlFetchApp.fetch(url, options);
 }
 function sendMessage_(webhook, message) {
     // Sends the message text to the given webhook URL
-    const payload = JSON.stringify({ text: message });
+    var user = Session.getActiveUser().getEmail()
+    const payload = {
+        cards: [{
+                header: {
+                  title: "Stage Report",
+                  subtitle: user,
+                    
+                },
+                sections: [{
+                        widgets: [{
+                                textParagraph: {
+                                    text: message
+                                },
+                            }],
+                    }],
+            }]
+    }
+    
+    
+    
+    
+    
     const options = {
         method: 'POST',
         contentType: 'application/json',
-        payload: payload,
+        payload: JSON.stringify(payload),
     };
     UrlFetchApp.fetch(webhook, options);
 }
@@ -303,4 +333,25 @@ function getUserEmail() {
         return user.getEmail();
     }
     return "";
+}
+
+function calculatePaddingSpaces(numSpaces) {
+  // Create a string containing the specified number of Unicode \u2005 characters (four-per-em spaces)
+  return "\u2004".repeat(numSpaces);
+}
+
+function getLastDataRowInColumn(sheet, column) {
+  var dataRange = sheet.getRange(1, column, sheet.getLastRow(), 1);
+  var dataValues = dataRange.getDisplayValues();
+  var lastDataRow = 0;
+  
+  // Loop through the values in reverse order to find the last non-empty cell
+  for (var i = dataValues.length - 1; i >= 0; i--) {
+    if (dataValues[i][0] !== "") {
+      lastDataRow = i + 1; // Add 1 to get the row number (1-based index)
+      break; // Exit the loop once the last non-empty cell is found
+    }
+  }
+
+  return lastDataRow;
 }
