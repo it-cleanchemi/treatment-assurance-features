@@ -166,7 +166,7 @@ function postShiftReport() {
             if (currentheader.includes("ORP - Working Tank") & shiftReportValues[i][j] > 0) {
                 postORP = postORP + shiftReportValues[i][j];
             }
-            if (currentheader.includes("PAA Residual") & shiftReportValues[i][j] > 0) {
+            if (currentheader.includes("Residual") & shiftReportValues[i][j] > 0) {
                 residual = residual + shiftReportValues[i][j];
             }
             if (currentheader == "Notes" & shiftReportValues[i][j] !== "") {
@@ -221,7 +221,7 @@ function postShiftReport() {
         residual = residual.toFixed(1);
     }
     else {
-        residual = "Final PAA residual is not measured";
+        residual = "Final residual is not measured";
     }
     ;
     if (notes === "") {

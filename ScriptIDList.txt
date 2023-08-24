@@ -15,3 +15,6 @@ SM RegFrac/all chems (frac):16TjP9zhiwSK6JOa8CRRQdtZs7F3A8NW4SWhStK4fTFwXH7Oubtv
 Sinclair AllChems (frac):1qXbvrquPUF4Xk3vryZFqmRQh13bWNpLidfUnEprXsZf-IbD0YC9G3bRa:
 Sabine PmaxOnly + stage email:1HKIcWcQzHid1uNJeWTKE9TusqSIGGrCCy8R4EjiMKKr9Ci-xVonQDVBs:
 Endeavor PmaxOnly:1VJsPwrQzLyWvZCow4kINXhiv2c4k1swyw2IXjjZQNaSidkHPjjTxR4Af:
+Diamondback Sitka (frac):14Xljubv1WEnQRXrZDVeLhLJf1kfWo84vUP9TlTINEIfShg85_cGMtbU1:
+Matador Barnett Trust/JJ Wheat:1qBL7FuIjwaNcKZMs6B6IdS6qhHNWgb4IoQ_vH566YhmHsMBMtTsWWHh-:
+BTA Mesa 53H/68H:1VWd_FV0D7xiZUhvICLKXOBL4zH_WsOuuAU9R9aqxIOoDLerQMmeJPJjX:
