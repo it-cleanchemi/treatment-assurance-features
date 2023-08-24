@@ -278,7 +278,7 @@ function postShiftReport() {
                                         "\n" + "<font color=\"#000000\"> Scale inhibitor dose (ppm):\t\t</text>" + "<font color=\"#0000FF\"> " + scaleDose + "</text>" +
                                         "\n" + "<font color=\"#000000\"> Pre-treatment ORP (mV):\t\t</text>" + "<font color=\"#0000FF\"> " + preORP + "</text>" +
                                         "\n" + "<font color=\"#000000\"> Post-treatment ORP (mV):\t\t</text>" + "<font color=\"#0000FF\"> " + postORP + "</text>" +
-                                        "\n" + "<font color=\"#000000\"> Post-treatment PAA residual (ppm):\t\t</text>" + "<font color=\"#0000FF\"> " + residual + "</text>" +
+                                        "\n" + "<font color=\"#000000\"> Post-treatment residual (ppm):\t\t</text>" + "<font color=\"#0000FF\"> " + residual + "</text>" +
                                         "\n\n" + "<font color=\"#000000\"> Latest ATP (pg/mL) is measured on " + latestATPmonth + "-" + latestATPdate + "-" + latestATPYear + " at " + latestATPhours + ":" + formattedMinutes + " " +
                                         "\n" + "Raw:\t\t </text>" + "<font color=\"#0000FF\"> " + latestATPRaw + "</text>" +
                                         "\n" + "<font color=\"#000000\"> Treated:\t\t</text>" + "<font color=\"#0000FF\"> " + latestATPTreated + "</text>" +
