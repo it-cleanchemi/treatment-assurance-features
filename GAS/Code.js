@@ -1,4 +1,4 @@
-//Revision 8/15/2023 - with emailing stage report -With CARD FORMATTING- 
+//Revision 9/20/2023 - RigUpChecklist post- 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
