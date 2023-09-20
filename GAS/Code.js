@@ -9,6 +9,7 @@ var headerRange = TA.getRange(1, 1, 1, TA.getLastColumn());
 var headerValues = headerRange.getValues()[0];
 const SS = SpreadsheetApp.getActiveSpreadsheet();
 const WEBHOOK = SS.getSheetByName('Reference').getRange("L2").getValues();
+
 function sendREPORT() {
     var reportSentColumnIndex = headerValues.indexOf("Report Sent") + 1;
     var referenceSheet = SS.getSheetByName('Reference');
@@ -355,3 +356,71 @@ function getLastDataRowInColumn(sheet, column) {
 
   return lastDataRow;
 }
+
+
+
+function postRigUpCheck(){
+  var RIG = SS.getSheetByName('Rig-UP Check');
+  var checkRange = RIG.getRange("B2:E" + RIG.getLastRow());
+  var checkValues = checkRange.getValues();
+  var message = "<p style='font-size: 11px;'>";
+  for (var i = 0; i < checkValues.length; i++) {
+    var rowData = checkValues[i];
+    
+    if (rowData[0]===true&&rowData[2]==="I was paying attension."){
+     message = message+"\n"+"❌ "+rowData[2];
+    }
+    else if (rowData[0]===false&&rowData[2]==="I was paying attension."){
+     message = message+"\n"+"✅ "+rowData[2];
+    }
+    
+    else if (rowData[0]===true&&rowData[2]!=="I was paying attension."){
+
+      message = message+"\n"+"✅ "+rowData[2];
+
+    }else{
+      message = message+"\n"+"❌ "+rowData[2];
+    }
+    
+  }
+var user = Session.getActiveUser().getEmail()
+const payload = {
+        cards: [{
+                header: {
+                  title: "Rig Up Check List",
+                  subtitle: user,
+                    
+                },
+                sections: [{
+                        widgets: [{
+                                textParagraph: {
+                                    text: message
+                                },
+                            }],
+                    }],
+            }]
+    }
+    
+    
+    
+    
+    
+    const options = {
+        method: 'POST',
+        contentType: 'application/json',
+        payload: JSON.stringify(payload),
+    };
+    UrlFetchApp.fetch(WEBHOOK, options);
+
+  var currentDate = new Date();
+  RIG.getRange("E1").setValue(currentDate);
+}
+
+
+
+
+
+
+
+
+
