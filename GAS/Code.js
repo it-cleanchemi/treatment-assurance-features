@@ -363,7 +363,7 @@ function postRigUpCheck(){
   var RIG = SS.getSheetByName('Rig-UP Check');
   var checkRange = RIG.getRange("B2:E" + RIG.getLastRow());
   var checkValues = checkRange.getValues();
-  var message = "<p style='font-size: 11px;'>";
+  var message = "<p style='font-size: 15px;'>";
   for (var i = 0; i < checkValues.length; i++) {
     var rowData = checkValues[i];
     
@@ -383,13 +383,15 @@ function postRigUpCheck(){
     }
     
   }
+message=message+"</p>";
 var user = Session.getActiveUser().getEmail()
 const payload = {
         cards: [{
                 header: {
                   title: "Rig Up Check List",
                   subtitle: user,
-                    
+                  imageUrl: "https://fonts.gstatic.com/s/e/notoemoji/15.0/1f6e0_fe0f/72.png=s100",
+                  imageStyle: "IMAGE"  
                 },
                 sections: [{
                         widgets: [{
@@ -413,14 +415,5 @@ const payload = {
     UrlFetchApp.fetch(WEBHOOK, options);
 
   var currentDate = new Date();
-  RIG.getRange("E1").setValue(currentDate);
+  RIG.getRange("A1").setValue(currentDate);
 }
-
-
-
-
-
-
-
-
-
