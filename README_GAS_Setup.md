@@ -29,11 +29,11 @@ npm install -g @google/clasp
 ```
 <br>
 
-### [Clasp](https://github.com/google/clasp) Details
+clasp### [Clasp](https://github.com/google/clasp) Details
 ```sh
 # Login with google credentials
 clasp login
-
+xsz
 # Logout at end of session
 clasp logout
 ```

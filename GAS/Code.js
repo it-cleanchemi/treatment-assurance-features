@@ -1,4 +1,4 @@
-//Revision 9/20/2023 - RigUpChecklist post- 
+//Revision 01/16/2023 - RigUpChecklist script fixed typos- 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
@@ -367,14 +367,14 @@ function postRigUpCheck(){
   for (var i = 0; i < checkValues.length; i++) {
     var rowData = checkValues[i];
     
-    if (rowData[0]===true&&rowData[2]==="I was paying attension."){
+    if (rowData[0]===true&&rowData[2]==="I was paying attention."){
      message = message+"\n"+"❌ "+rowData[2];
     }
-    else if (rowData[0]===false&&rowData[2]==="I was paying attension."){
+    else if (rowData[0]===false&&rowData[2]==="I was paying attention."){
      message = message+"\n"+"✅ "+rowData[2];
     }
     
-    else if (rowData[0]===true&&rowData[2]!=="I was paying attension."){
+    else if (rowData[0]===true&&rowData[2]!=="I was paying attention."){
 
       message = message+"\n"+"✅ "+rowData[2];
 
@@ -383,25 +383,27 @@ function postRigUpCheck(){
     }
     
   }
-message=message+"</p>";
-var user = Session.getActiveUser().getEmail()
-const payload = {
-        cards: [{
-                header: {
-                  title: "Rig Up Check List",
-                  subtitle: user,
-                  imageUrl: "https://fonts.gstatic.com/s/e/notoemoji/15.0/1f6e0_fe0f/72.png=s100",
-                  imageStyle: "IMAGE"  
-                },
-                sections: [{
-                        widgets: [{
-                                textParagraph: {
-                                    text: message
-                                },
-                            }],
-                    }],
-            }]
-    }
+    Logger.log(message);
+
+    message=message+"</p>";
+    var user = Session.getActiveUser().getEmail()
+    const payload = {
+            cards: [{
+                    header: {
+                      title: "Rig Up Check List",
+                      subtitle: user,
+                      imageUrl: "https://fonts.gstatic.com/s/e/notoemoji/15.0/1f6e0_fe0f/72.png=s100",
+                      imageStyle: "IMAGE"  
+                    },
+                    sections: [{
+                            widgets: [{
+                                    textParagraph: {
+                                        text: message
+                                    },
+                                }],
+                        }],
+                }]
+        }
     
     
     

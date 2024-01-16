@@ -1,17 +1,17 @@
-Matador SimulFrac (frac):176xhnzWnxkxRsEJW_A5m_-yOTK_m0vU56_lQnkkv9XdqJSJC5QgAj7BN:
-SM SimulFrac all chems (frac):1SZZ8hENdoHqmc7bWpgPNrq_eWBfLINRBkz7vU37N-dNcfEAqQKD8NxNC:
-Matador AllChems (frac):147N7URKXJ2VKo7B8Ln3xwyHaTu3y-BtVohBhK-2cXcr1DH1SOUGjOEhr:
-Lime Rock AllChems (frac):1JuWh7xXilhwSgnj3OGDvJvQh9TuSWqc4QPOpelONDw4FvR1FDU0hrhcT:
-Diamondback SimulFracAllChems (frac):1g2yWDaPBwX4KWaO30fz_pF8fc0NKycut2_Ugs281Zv5n879mBhn-l2ON:
-Diamondback Simul/2waters (frac):1AAAzWcqiYYT3be48dVWLZl6_JY6aNuwYRlX3UoGYblu035-Qptckq6gb:
-Diamondback DDAC/2120M1water (frac):1X8gZvCBHnrA-tILKKxAVOVMnjGJpom7_PFS6ZhGMCm11lNmWls5JRBG6:
-Diamondback DDAC/2115M/2waters (frac):1DIk-fEZNj1ArY-HAfL6Vyn85uhtbWYTDS7Wq97bcBbtCd28RE5i3Vqpu:
-COP PmaxOnly (frac):1T3TZBS7YGLKh7DjT_NGrMRN1VMlDk8uOtecJk1P_q-v8Ig2jks1_vaj5:
-BTA AllChems (frac):1bSSubZNwI9KxaMVjVCZpD4ZIeAPKPRqKQ6VjURjzvwlxpUZ_s0jozsOy:
-Baytex AllChems (frac):1m9PEQikpQBnZx2RYOJRIrfDNKUs2WrfoA0Z-7AcfnBaryktRVdgAtADL:
-Vencer Pmax (frac):1G-DU7K2btjjIsYoMQNkt359VximSIpwXcjuRZRShCm-WTzlbeSNXyrK1:
-SM SimulFrac all chems (frac):1SZZ8hENdoHqmc7bWpgPNrq_eWBfLINRBkz7vU37N-dNcfEAqQKD8NxNC:
-SM RegFrac/all chems (frac):16TjP9zhiwSK6JOa8CRRQdtZs7F3A8NW4SWhStK4fTFwXH7OubtvaVAYG:
-Sinclair AllChems (frac):1qXbvrquPUF4Xk3vryZFqmRQh13bWNpLidfUnEprXsZf-IbD0YC9G3bRa:
+Matador SimulFrac (frac):1J5aWFQSoymi8uAoaG5bpy5cuw1NwsUNF7tZaPjB3pEVJL5NIORHZVIdF:
+SM SimulFrac all chems (frac)::
+Matador AllChems (frac):1vVtx-xNZdgOHeQ1lzIabBjjFtKGn0sQ2WRIuOCIVuK2DoXUZwio4p0gk:
+Lime Rock AllChems (frac)::
+Diamondback SimulFracAllChems (frac)::
+Diamondback Simul/2waters (frac)::
+Diamondback DDAC/2120M1water (frac)::
+Diamondback DDAC/2115M/2waters (frac)::
+COP PmaxOnly (frac)::
+BTA AllChems (frac)::
+Baytex AllChems (frac)::
+Vencer Pmax (frac)::
+SM SimulFrac all chems (frac)::
+SM RegFrac/all chems (frac)::
+Sinclair AllChems (frac)::
 Sabine PmaxOnly + stage email:1HKIcWcQzHid1uNJeWTKE9TusqSIGGrCCy8R4EjiMKKr9Ci-xVonQDVBs:
-Avant PreHPScaleDDAC:1zYl_NbWo-bwmeOU4hLWKkzGAwvjnWeW9uEIrpDfTzWBh7ajggxEvGspt:
+Avant PreHPScaleDDAC::
