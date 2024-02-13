@@ -1,4 +1,4 @@
-//Revision 02/13/2024 - RigUpChecklist script fixed typos- 
+//Revision 01/16/2023 - RigUpChecklist script fixed typos- 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
