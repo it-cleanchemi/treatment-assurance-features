@@ -1,17 +1,18 @@
-Matador SimulFrac (frac):1J5aWFQSoymi8uAoaG5bpy5cuw1NwsUNF7tZaPjB3pEVJL5NIORHZVIdF:
-SM SimulFrac all chems (frac)::
-Matador AllChems (frac):1vVtx-xNZdgOHeQ1lzIabBjjFtKGn0sQ2WRIuOCIVuK2DoXUZwio4p0gk:
-Lime Rock AllChems (frac)::
-Diamondback SimulFracAllChems (frac)::
-Diamondback Simul/2waters (frac)::
-Diamondback DDAC/2120M1water (frac)::
-Diamondback DDAC/2115M/2waters (frac)::
-COP PmaxOnly (frac)::
-BTA AllChems (frac)::
-Baytex AllChems (frac)::
-Vencer Pmax (frac)::
-SM SimulFrac all chems (frac)::
-SM RegFrac/all chems (frac)::
-Sinclair AllChems (frac)::
-Sabine PmaxOnly + stage email:1HKIcWcQzHid1uNJeWTKE9TusqSIGGrCCy8R4EjiMKKr9Ci-xVonQDVBs:
-Avant PreHPScaleDDAC::
+Matador SimulFrac:1J5aWFQSoymi8uAoaG5bpy5cuw1NwsUNF7tZaPjB3pEVJL5NIORHZVIdF:
+Endeavor PmaxOnly:1fQdx6qB5KSMCjLQx4Nvrrk8YVH5m-QBOUEUqD24_cN2FFzeaf_rT_gFv:
+Matador AllChems:1vVtx-xNZdgOHeQ1lzIabBjjFtKGn0sQ2WRIuOCIVuK2DoXUZwio4p0gk:
+Lime Rock AllChems:1iWD2oCrlIWMNSof1nx5j3GicJXHtf3RciFbEtfvYXff90QdU9j9l558e:
+Diamondback SimulFracAllChems:1uLb36kN_0dDec3tsZA4XELtDGmuYX8KAr2K92nmb1v2FD5f1HJPJGWmz:
+Diamondback: 1uLb36kN_1uLb36kN_0dDec3tsZA4XELtDGmuYX8KAr2K92nmb1v2FD5f1HJPJGWmz:
+Diamondback Simul2waters:19R_Sqqz9creLG99SF0HteMyW_y-qLDmrc2YCc9L7IauvLx7zBmKbze0f:
+Diamondback DDAC2120M1water:10s9OLqjMLKkQddwbvdg_q0W7BxyuB2tS5_TZVgbx0SDLlyXh7tfZPNMx:
+Diamondback DDAC2115M2waters:19R_Sqqz9creLG99SF0HteMyW_y-qLDmrc2YCc9L7IauvLx7zBmKbze0f:
+COP PmaxOnly :1xcwhLDNpsyiNr3FqeWPqmEOFglOlRMPcJ1lkj8tTih4614UPV0wsxLCH:
+BTA AllChems:10dJXx30qZr_g1N30O85Yn4t-HHkxjnBtbfSMsm6I8wLJvGXa6BZ2bahl:
+Baytex AllChems :1zL9in9Ma4uu5Ma7YuKQzVq1PhMmZyPoXVY3GrznTSdChJQ6pFB9noyCY:
+Civitas Pmax:1mf894L3S5Yn27XrG8Qyx9qTUJEJrorIKaa5mqeOczipVkDRrZHhS77Ce:
+SM SimulFrac all chems :16Cb-Fq2TXOG2pPQ1Yba4LUyUh1Sx8iBug4cn9_hwPfvrzGHClFe-wMDW:
+SM RegFracall chems:1pedkB-LaxyyGnznEWGlu4kOhs1QfjvPwGAMBcz0jcLvkKKne5D971OcR:
+Sinclair AllChems:1tygY9jysyHAbjKhcxztGOpJsYSWaEVXc0NznBZqw1Z9xvpNmAzBOLquh:
+Sabine PmaxOnly stage email:1yphaC6N0_pRBMcMm7VBKhUziBs0WKonHesuNUVY3Up6BpQH0GEgHNFZT:
+Avant PreHPScaleDDAC:17WWgVv3LYIv0a08iFurjCH9PmQtfquolFiGIaSy3tg9D5KyK6gTspi3U:
