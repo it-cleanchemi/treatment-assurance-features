@@ -1,4 +1,4 @@
-//Revision 02/12/2024 - RigUpChecklist script fixed typos- 
+//Revision 03/12/2024 - Inventory reminders- 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
@@ -114,8 +114,9 @@ function sendREPORT() {
         });
     } catch{
       
-      return;
+      
     }
+  remindInventory();
 }
 
 function postShiftReport() {
