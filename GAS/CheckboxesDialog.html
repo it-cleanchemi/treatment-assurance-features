@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <form id="myForm">
+      <p>How did you check on the rig up?</p> 
+      <label>Visit: </label><br>
+      <input type="radio" name="Location Visit" value="Yes"> Yes
+      <input type="radio" name="Location Visit" value="No"> No<br>
+
+      <label>Phone call:</label><br>
+      <input type="radio" name="Phone Call" value="Yes"> Yes
+      <input type="radio" name="Phone Call" value="No"> No<br>
+      <p>Do you confirm the check list is correct and the unit is ready for the job?</p>
+      <label>Rig Up Approved:</label><br>
+      <input type="radio" name="Approval" value="Yes"> Yes
+      <input type="radio" name="Approval" value="No"> No<br><br><br>
+      <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+    
+    <script>
+      function submitForm() {
+        var form = document.getElementById('myForm');
+        var formData = new FormData(form);
+        var object = {};
+        formData.forEach(function(value, key){
+            // Append form data into an object
+            if(!object[key]) {
+                object[key] = value;
+                return;
+            }
+            // For fields with the same name (like checkboxes), create an array of values
+        if (!Array.isArray(object[key])) {
+            object[key] = [object[key]]; // Convert existing value to an array
+        }
+        object[key].push(value); // Add the new value to the array
+      });
+    
+      google.script.run
+      .withSuccessHandler(function() {
+          google.script.host.close(); // Close the dialog after successful submission
+      })
+      .processForm(object); // Execute the server-side Apps Script function with the form data
+    }
+    </script>
+  </body>
+</html>

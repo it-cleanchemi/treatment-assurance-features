@@ -1,4 +1,4 @@
-//Revision 03/12/2024 - Inventory reminders- 
+//Revision 03/13/2024 - Inventory reminders-bug fix 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
@@ -362,6 +362,15 @@ function getLastDataRowInColumn(sheet, column) {
 
 function postRigUpCheck(){
   var RIG = SS.getSheetByName('Rig-UP Check');
+  var TAname = SS.getName();
+  var JobCode = TAname.split(" ")[0];
+  if (RIG) {
+    var gid = RIG.getSheetId(); // Get the unique ID (gid) of the sheet
+    var TAurl = SS.getUrl() + "#gid=" + gid; // Construct the URL for the specific sheet
+    
+  }
+  
+  
   var checkRange = RIG.getRange("B2:E" + RIG.getLastRow());
   var checkValues = checkRange.getValues();
   var message = "<p style='font-size: 15px;'>";
@@ -416,7 +425,125 @@ function postRigUpCheck(){
         payload: JSON.stringify(payload),
     };
     UrlFetchApp.fetch(WEBHOOK, options);
+    // Define recipients
+    var recipients = "v.martysevich@cleanchemi.com, c.dreher@cleanchemi.com, j.day@cleanchemi.com,y.legra@cleanchemi.com, t.nix@cleanchemi.com"; // Add or modify recipients
+    var subject = "‼️ Approval Request For   " + JobCode +". The Rig Up Checklist is submitted";
+    var htmlBody = "<p>Checklist submitted by: " + user + "  Job: "+ TAname +"</p>"+
+                    "<p>Please log in to below TA, veryfy the rig up completion, and sign off on the rig up: </p>"+
+                    "<p>" + TAurl+ "</p>";
+    
+    // Sending the email
+    try{
+    MailApp.sendEmail({
+      to: recipients,
+      subject: subject,
+      htmlBody: htmlBody,
+    });
+    }catch(error){
 
+      Logger.log("error sending email"+error);
+    }
+    
   var currentDate = new Date();
   RIG.getRange("A1").setValue(currentDate);
 }
+
+function rigupApproval(){
+  var ui = SpreadsheetApp.getUi();
+  var user = Session.getActiveUser().getEmail();
+  if(user==="v.martysevich@cleanchemi.com"||
+    user==="c.dreher@cleanchemi.com"||
+    user==="j.day@cleanchemi.com"||
+    user==="y.legra@cleanchemi.com"||
+    user==="t.nix@cleanchemi.com"){
+
+   showDialog();
+  }else{ 
+    ui.alert('Not a Supervisor', 'Please ask your supervisor to sign off for the rig up', ui.ButtonSet.OK);
+    return; // Exit the script
+  }
+}
+
+function showDialog() {
+  var html = HtmlService.createHtmlOutputFromFile('CheckboxesDialog')
+      .setWidth(400)
+      .setHeight(300);
+  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
+      .showModalDialog(html, 'Rig Up Approval Form');
+}
+
+
+function processForm(formData) {
+ 
+  var message = "<p>";
+  
+  if (formData.hasOwnProperty('Location Visit')&&formData['Location Visit']==="Yes") {
+    message += "Supervisor visited job location and checked the rig up.\n\n";
+  }
+  if (formData.hasOwnProperty('Phone Call')&&formData['Phone Call']==="Yes") {
+    message += "Supervisor checked the rig up by phone call\n\n";
+  }
+  if (formData.hasOwnProperty('Approval')&&formData['Approval']==="Yes") {
+    message += "<font color=\"#000000\">Supervisor ceritfies that Unit is ready for the job. \n\n <font color=\"#0000FF\"><b>Rig-up is  Approved!</b></p>";
+  }
+  
+  if (formData.hasOwnProperty('Approval')&&formData['Approval']==="No") {
+    message += "<font color=\"#FF0000\"><b>The unit is not ready!</b>\n\n</p>";
+  }
+  
+  var approval = ""
+
+  if (formData.hasOwnProperty('Approval')&&formData['Approval']==="Yes"){
+    approval = "https://fonts.gstatic.com/s/e/notoemoji/15.0/2705/32.png"
+  }else if(formData.hasOwnProperty('Approval')&&formData['Approval']==="No"){
+    approval = "https://fonts.gstatic.com/s/e/notoemoji/15.0/26d4/32.png"
+
+  }else{
+    approval = "https://fonts.gstatic.com/s/e/notoemoji/15.0/1f914/32.png"
+  }
+
+
+
+  /*
+  *Reporting Approval
+  */
+ 
+
+
+ var user = Session.getActiveUser().getEmail();
+
+ 
+ 
+ const payload = {
+            cards: [{
+                    header: {
+                      title: "Rig Up Approval",
+                      subtitle: "Supervisor: "+ user,
+                      imageUrl: approval,
+                      imageStyle: "IMAGE"  
+                    },
+                    sections: [{
+                            widgets: [{
+                                    textParagraph: {
+                                        text: message
+                                    },
+                                }],
+                        }],
+                }]
+        }
+    
+    
+    
+    
+    
+    const options = {
+        method: 'POST',
+        contentType: 'application/json',
+        payload: JSON.stringify(payload),
+    };
+    UrlFetchApp.fetch(WEBHOOK, options);
+    
+    
+
+}
+

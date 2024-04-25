@@ -1,4 +1,5 @@
-var refS = SS.getSheetByName("Reference");
+const sheet = SpreadsheetApp.getActiveSpreadsheet();
+var refS = sheet.getSheetByName("Reference");
 var triggesRange = refS.getRange("Q2:T"+refS.getLastRow());
 var triggersAll = triggesRange.getValues();
 var triggers = triggersAll.filter(function(row) {
@@ -13,9 +14,9 @@ function triggerFunction(){
 }
 
 function remindInventory(){
-  const inventorySheet = SS.getSheetByName("Active Inventory");
+  const inventorySheet = sheet.getSheetByName("Active Inventory");
   const now = new Date();
-  var inventoryCombinedRange = inventorySheet.getRange("A2:A500");
+  var inventoryCombinedRange = inventorySheet.getRange("A2:A");
   var inventoryCombined = inventoryCombinedRange.getValues();
   var filteredInventory = inventoryCombined.flat().filter(element => element !== "");
   if(filteredInventory.length > 0) {
