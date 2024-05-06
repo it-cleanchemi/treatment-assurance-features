@@ -1,4 +1,4 @@
-//Revision 03/13/2024 - Inventory reminders-bug fix 
+//Revision 05/06/2024 - Weather check code 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
@@ -297,6 +297,7 @@ function postShiftReport() {
     };
     var url = WEBHOOK;
     UrlFetchApp.fetch(url, options);
+ weatherTrigger(); //triggers weather check with 1 hour delay.
 }
 function sendMessage_(webhook, message) {
     // Sends the message text to the given webhook URL
