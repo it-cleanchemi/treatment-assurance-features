@@ -297,7 +297,7 @@ function postShiftReport() {
     };
     var url = WEBHOOK;
     UrlFetchApp.fetch(url, options);
- weatherTrigger(); //triggers weather check with 1 hour delay.
+ // weatherTrigger(); //triggers weather check with 1 hour delay.
 }
 function sendMessage_(webhook, message) {
     // Sends the message text to the given webhook URL

@@ -69,7 +69,7 @@ function postWeatherUpdate() {
 
   
 
-  var webhookUrl = 'https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg';
+  var webhookUrl = WEBHOOK; //'https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg';
    UrlFetchApp.fetch(webhookUrl, {
     'method': 'post',
     'contentType': 'application/json',
