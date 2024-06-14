@@ -427,7 +427,7 @@ function postRigUpCheck(){
     };
     UrlFetchApp.fetch(WEBHOOK, options);
     // Define recipients
-    var recipients = "v.martysevich@cleanchemi.com, c.dreher@cleanchemi.com, j.day@cleanchemi.com,y.legra@cleanchemi.com, t.nix@cleanchemi.com, j.amparan@cleanchemi.com"; // Add or modify recipients
+    var recipients = "v.martysevich@cleanchemi.com, c.dreher@cleanchemi.com, j.day@cleanchemi.com,y.legra@cleanchemi.com, t.nix@cleanchemi.com, j.amparan@cleanchemi.com, t.nutz@cleanchemi.com"; // Add or modify recipients
     var subject = "‼️ Approval Request For   " + JobCode +". The Rig Up Checklist is submitted";
     var htmlBody = "<p>Checklist submitted by: " + user + "  Job: "+ TAname +"</p>"+
                     "<p>Please log in to below TA, veryfy the rig up completion, and sign off on the rig up: </p>"+
@@ -457,7 +457,8 @@ function rigupApproval(){
     user==="j.day@cleanchemi.com"||
     user==="y.legra@cleanchemi.com"||
     user==="t.nix@cleanchemi.com"||
-    user==="j.amparan@cleanchemi.com") {
+    user==="j.amparan@cleanchemi.com"||
+    user==="t.nutz@cleanchemi.com") {
 
    showDialog();
   }else{ 
