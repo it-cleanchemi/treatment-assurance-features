@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Dear Team,</p>
+    <p>Please find below the inventory differences report:</p>
+    <p><?!= jobName ?></p>
+    <table>
+      <?!= tableRows ?>
+    </table>
+    <p>Best Regards,<br>Your Automated System</p>
+  </body>
+</html>
