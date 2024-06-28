@@ -1,5 +1,5 @@
 /**
- Version 6/24/2024
+ Version 6/27/2024
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -17,7 +17,7 @@ const port = '3305';
 const dbName = 'Clean_Chemi';
 const username = 'cc_viewer';
 const password = 'Cleanchemi!1';
-const emailRecipient = "v.martysevich@cleanchemi.com, l.lee@cleanchemi.com, c.dreher@cleanchemi.com";
+const emailRecipient = "v.martysevich@cleanchemi.com, l.lee@cleanchemi.com, c.dreher@cleanchemi.com, t.nutz@cleanchemi.com";
 
 function updateConsumption() {
     const sheet = SS.getSheetByName("Fishbowl Inventory");
@@ -137,14 +137,14 @@ function fetchCurrentInventory(jobCode) {
     return data;
 }
 
-function compareInventories(dbData,jobCode) {
-    var activeInventorySheet = SS.getSheetByName("Active Inventory too");
+function compareInventories(dbData, jobCode) {
+    var activeInventorySheet = SS.getSheetByName("Active Inventory");
     var activeInventoryRange = activeInventorySheet.getRange('A2:J');
     var activeInventoryDataUnfiltered = activeInventoryRange.getValues();
 
-    // Filter the data to keep only rows where the 7th column is not an empty string
+    // Filter the data to keep only rows where the 6th column is not an empty string
     var activeInventoryData = activeInventoryDataUnfiltered.filter(function(row) {
-        return row[6] !== "";
+        return row[5] !== "";
     });
 
     // Create a map for the latest records in active inventory based on tote identifier
@@ -154,9 +154,9 @@ function compareInventories(dbData,jobCode) {
     activeInventoryData.forEach(function(row) {
         var toteIdentifier = row[5];
         var date = new Date(row[0]); // Assuming the date is in the first column
-
+        var originalQuantity = row[9];
         if (!firstSeenMap[toteIdentifier]) {
-            firstSeenMap[toteIdentifier] = date;
+            firstSeenMap[toteIdentifier] = { date: date, originalQuantity: originalQuantity };
         }
         lastSeenMap[toteIdentifier] = date;
 
@@ -181,21 +181,22 @@ function compareInventories(dbData,jobCode) {
         tableRows += `<th>${header}</th>`;
     });
     tableRows += "</tr>";
+
     // Create a set of tote identifiers from dbData for quick lookup
     var dbToteIdentifiers = new Set(dbData.slice(1).map(row => row[0]));
-    
+
     // Loop through the Fishbowl inventory and compare with the active inventory
     dbData.slice(1).forEach(function(row) {
         var toteIdentifier = row[0];
-        var chemicalName = row[1];
+        var chemicalName = toteIdentifier.split('-')[0];  // Extract chemical name from tote identifier
         var fBQuantity = parseFloat(row[3]);
         var tId = row[6];
         var originalQuantity = parseFloat(row[7]);
-        var activeInventoryQuantity = latestActiveInventory[toteIdentifier] ? parseFloat(latestActiveInventory[toteIdentifier][8]) : "";
+        var activeInventoryQuantity = latestActiveInventory[toteIdentifier] ? parseFloat(latestActiveInventory[toteIdentifier][9]) : "";
         var difference = activeInventoryQuantity !== "" ? activeInventoryQuantity - fBQuantity : "";
         var activeTote = (activeInventoryQuantity !== 0) ? toteIdentifier : "";
-        var firstSeen = firstSeenMap[toteIdentifier] ? firstSeenMap[toteIdentifier].toISOString().split('T')[0] : '';
-        var lastSeen = lastSeenMap[toteIdentifier] ? lastSeenMap[toteIdentifier].toISOString().split('T')[0] : '';
+        var firstSeen = firstSeenMap[toteIdentifier] ? formatDateTime(firstSeenMap[toteIdentifier].date) : '';
+        var lastSeen = lastSeenMap[toteIdentifier] ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
 
         var rowData = [toteIdentifier, chemicalName, row[2], fBQuantity, row[4], row[5], tId, originalQuantity, activeInventoryQuantity, difference, activeTote, firstSeen, lastSeen];
         comparisonData.push(rowData);
@@ -210,29 +211,67 @@ function compareInventories(dbData,jobCode) {
         });
         tableRows += "</tr>";
     });
+
     // Check for totes in active inventory that are not in dbData and add them as empty totes
-      Object.keys(latestActiveInventory).forEach(toteIdentifier => {
-          if (!dbToteIdentifiers.has(toteIdentifier)) {
-              var activeRow = latestActiveInventory[toteIdentifier];
-              var chemicalName = "Empty";
-              var job = jobCode;
-              var firstSeen = firstSeenMap[toteIdentifier] ? firstSeenMap[toteIdentifier].toISOString().split('T')[0] : '';
-              var lastSeen = lastSeenMap[toteIdentifier] ? lastSeenMap[toteIdentifier].toISOString().split('T')[0] : '';
+    Object.keys(latestActiveInventory).forEach(toteIdentifier => {
+        if (!dbToteIdentifiers.has(toteIdentifier)) {
+            var activeRow = latestActiveInventory[toteIdentifier];
+            var chemicalName = toteIdentifier.split('-')[0];  // Extract chemical name from tote identifier
+            var job = jobCode;
+            var firstSeen = firstSeenMap[toteIdentifier] ? formatDateTime(firstSeenMap[toteIdentifier].date) : '';
+            var lastSeen = lastSeenMap[toteIdentifier] ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
+            var originalQuantity = firstSeenMap[toteIdentifier] ? firstSeenMap[toteIdentifier].originalQuantity : 0;
 
-              var rowData = [toteIdentifier, chemicalName, job, "", "", "", "", "", 0, 0, "", firstSeen, lastSeen];
-              comparisonData.push(rowData);
+            var rowData = [toteIdentifier, chemicalName, job, 0, firstSeen, lastSeen, "", originalQuantity, 0, 0, "", firstSeen, lastSeen];
+            comparisonData.push(rowData);
 
-              tableRows += "<tr>";
-              rowData.forEach(function(cell, index) {
-                  if (index === 0) {
-                      tableRows += `<td style="color: blue;">${cell}</td>`;
-                  } else {
-                      tableRows += `<td>${cell}</td>`;
-                  }
-              });
-              tableRows += "</tr>";
-          }
-      });
+            tableRows += "<tr>";
+            rowData.forEach(function(cell, index) {
+                if (index === 0) {
+                    tableRows += `<td style="color: blue;">${cell}</td>`;
+                } else {
+                    tableRows += `<td>${cell}</td>`;
+                }
+            });
+            tableRows += "</tr>";
+        }
+    });
+
+    // Add new totes to the "Active Inventory" sheet
+    var newActiveInventoryRows = [];
+    dbData.slice(1).forEach(function(row) {
+        var toteIdentifier = row[0];
+        if (!latestActiveInventory[toteIdentifier]) {
+            var chemicalName = toteIdentifier.split('-')[0];  // Extract chemical name from tote identifier
+            var dateCreated = new Date(row[4]); // Assuming the date created is in the 5th column
+            var currentTime = new Date();
+            var ampm = currentTime.getHours() >= 12 ? "Delivery PM" : "Delivery AM";
+            var time = currentTime.getHours().toString().padStart(2, '0') + ":" + currentTime.getMinutes().toString().padStart(2, '0');
+            var date = (currentTime.getMonth() + 1).toString().padStart(2, '0') + '/' + 
+                       currentTime.getDate().toString().padStart(2, '0') + '/' + 
+                       currentTime.getFullYear();
+            newActiveInventoryRows.push(["", date, ampm, time, "Auto", toteIdentifier, "", "", chemicalName, row[3]]);
+        }
+    });
+
+
+    if (newActiveInventoryRows.length > 0) {
+        // Find the last row with data in column A
+        var lastRow = activeInventorySheet.getRange('A:A').getValues().filter(String).length;
+        
+        // Add the new rows while keeping the existing formulas in columns A and B intact
+        newActiveInventoryRows.forEach((newRow, index) => {
+            var newRowNumber = lastRow + index + 1;
+            activeInventorySheet.getRange(newRowNumber, 2).setValue(newRow[1]); // Column B
+            activeInventorySheet.getRange(newRowNumber, 3).setValue(newRow[2]); // Column C
+            activeInventorySheet.getRange(newRowNumber, 4).setValue(newRow[3]); // Column D
+            activeInventorySheet.getRange(newRowNumber, 5).setValue(newRow[4]); // Column E
+            activeInventorySheet.getRange(newRowNumber, 6).setValue(newRow[5]); // Column F
+            activeInventorySheet.getRange(newRowNumber, 9).setValue(newRow[8]); // Column I
+            activeInventorySheet.getRange(newRowNumber, 10).setValue(newRow[9]); // Column J
+        });
+    }
+
     return { tableRows: tableRows, rows: comparisonData };
 }
 
@@ -312,7 +351,7 @@ function postToGoogleChat(chemicalSummary, jobName) {
         }
 
         text += `<font color=\"#0000FF\"><b>${chemicalName}</b></font>\n`;
-        text += `Full Totes: <b>${summary.fullTotes}</b>\n`;
+        text += `New Totes: <b>${summary.fullTotes}</b>\n`;
         text += `Partial Totes: <b>${summary.partialTotes}</b>\n`;
         if (summary.emptyTotes > 0) {
             text += `Empty Totes: <b>${summary.emptyTotes}</b>\n`;
@@ -355,3 +394,13 @@ function postToGoogleChat(chemicalSummary, jobName) {
 
     UrlFetchApp.fetch(chatWebhookUrl, options);
 }
+// Helper function to format date and time as mm/dd/yyyy hh:mm:ss
+    function formatDateTime(date) {
+        var mm = (date.getMonth() + 1).toString().padStart(2, '0');
+        var dd = date.getDate().toString().padStart(2, '0');
+        var yyyy = date.getFullYear();
+        var hh = date.getHours().toString().padStart(2, '0');
+        var mi = date.getMinutes().toString().padStart(2, '0');
+        var ss = date.getSeconds().toString().padStart(2, '0');
+        return `${mm}/${dd}/${yyyy} ${hh}:${mi}:${ss}`;
+    }
