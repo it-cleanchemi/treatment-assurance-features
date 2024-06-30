@@ -1,5 +1,5 @@
 /**
- Version 6/27/2024
+ Version 6/29/2024
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -155,9 +155,16 @@ function compareInventories(dbData, jobCode) {
         var toteIdentifier = row[5];
         var date = new Date(row[0]); // Assuming the date is in the first column
         var originalQuantity = row[9];
-        if (!firstSeenMap[toteIdentifier]) {
-            firstSeenMap[toteIdentifier] = { date: date, originalQuantity: originalQuantity };
+
+        // Update firstSeenMap only if row[2] does not contain "Delivery"
+        if (!row[2].includes("Delivery")) {
+            if (!firstSeenMap[toteIdentifier]) {
+                firstSeenMap[toteIdentifier] = { date: date, originalQuantity: originalQuantity };
+            } else if (date < firstSeenMap[toteIdentifier].date) {
+                firstSeenMap[toteIdentifier] = { date: date, originalQuantity: originalQuantity };
+            }
         }
+
         lastSeenMap[toteIdentifier] = date;
 
         if (!latestActiveInventory[toteIdentifier]) {
@@ -195,8 +202,8 @@ function compareInventories(dbData, jobCode) {
         var activeInventoryQuantity = latestActiveInventory[toteIdentifier] ? parseFloat(latestActiveInventory[toteIdentifier][9]) : "";
         var difference = activeInventoryQuantity !== "" ? activeInventoryQuantity - fBQuantity : "";
         var activeTote = (activeInventoryQuantity !== 0) ? toteIdentifier : "";
-        var firstSeen = firstSeenMap[toteIdentifier] ? formatDateTime(firstSeenMap[toteIdentifier].date) : '';
-        var lastSeen = lastSeenMap[toteIdentifier] ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
+        var firstSeen = (firstSeenMap[toteIdentifier] && !latestActiveInventory[toteIdentifier][2].includes("Delivery")) ? formatDateTime(firstSeenMap[toteIdentifier].date) : '';
+        var lastSeen = (lastSeenMap[toteIdentifier] && !latestActiveInventory[toteIdentifier][2].includes("Delivery")) ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
 
         var rowData = [toteIdentifier, chemicalName, row[2], fBQuantity, row[4], row[5], tId, originalQuantity, activeInventoryQuantity, difference, activeTote, firstSeen, lastSeen];
         comparisonData.push(rowData);
@@ -243,7 +250,6 @@ function compareInventories(dbData, jobCode) {
         var toteIdentifier = row[0];
         if (!latestActiveInventory[toteIdentifier]) {
             var chemicalName = toteIdentifier.split('-')[0];  // Extract chemical name from tote identifier
-            var dateCreated = new Date(row[4]); // Assuming the date created is in the 5th column
             var currentTime = new Date();
             var ampm = currentTime.getHours() >= 12 ? "Delivery PM" : "Delivery AM";
             var time = currentTime.getHours().toString().padStart(2, '0') + ":" + currentTime.getMinutes().toString().padStart(2, '0');
@@ -253,7 +259,6 @@ function compareInventories(dbData, jobCode) {
             newActiveInventoryRows.push(["", date, ampm, time, "Auto", toteIdentifier, "", "", chemicalName, row[3]]);
         }
     });
-
 
     if (newActiveInventoryRows.length > 0) {
         // Find the last row with data in column A
@@ -274,6 +279,7 @@ function compareInventories(dbData, jobCode) {
 
     return { tableRows: tableRows, rows: comparisonData };
 }
+
 
 function extractJobDetails(sheetName) {
     var match = sheetName.match(/^([A-Z]{2}\d{3}) Treatment Assurance Data Collection - (.+?) \((.+?)\)$/);
@@ -338,7 +344,7 @@ function generateSummary(comparisonData) {
     return chemicalSummary;
 }
 function postToGoogleChat(chemicalSummary, jobName) {
-  var chatWebhookUrl = WEBHOOK; //"https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg";
+  var chatWebhookUrl = WEBHOOK;//"https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg";
  var emptyTotesCount = 0;
 
     // Build the summary text
