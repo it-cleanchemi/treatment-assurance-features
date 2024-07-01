@@ -1,5 +1,5 @@
 /**
- Version 6/29/2024
+ Version 7/01/2024 - Chemical map
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -195,7 +195,8 @@ function compareInventories(dbData, jobCode) {
     // Loop through the Fishbowl inventory and compare with the active inventory
     dbData.slice(1).forEach(function(row) {
         var toteIdentifier = row[0];
-        var chemicalName = toteIdentifier.split('-')[0];  // Extract chemical name from tote identifier
+        var prefix = toteIdentifier.split('-')[0];  // Extract prefix from tote identifier
+        var chemicalName = getChemicalName(prefix);  // Get chemical name from prefix
         var fBQuantity = parseFloat(row[3]);
         var tId = row[6];
         var originalQuantity = parseFloat(row[7]);
@@ -344,7 +345,7 @@ function generateSummary(comparisonData) {
     return chemicalSummary;
 }
 function postToGoogleChat(chemicalSummary, jobName) {
-  var chatWebhookUrl = WEBHOOK;//"https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg";
+  var chatWebhookUrl = WEBHOOK; //"https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg";
  var emptyTotesCount = 0;
 
     // Build the summary text
@@ -401,7 +402,7 @@ function postToGoogleChat(chemicalSummary, jobName) {
     UrlFetchApp.fetch(chatWebhookUrl, options);
 }
 // Helper function to format date and time as mm/dd/yyyy hh:mm:ss
-    function formatDateTime(date) {
+function formatDateTime(date) {
         var mm = (date.getMonth() + 1).toString().padStart(2, '0');
         var dd = date.getDate().toString().padStart(2, '0');
         var yyyy = date.getFullYear();
@@ -409,4 +410,25 @@ function postToGoogleChat(chemicalSummary, jobName) {
         var mi = date.getMinutes().toString().padStart(2, '0');
         var ss = date.getSeconds().toString().padStart(2, '0');
         return `${mm}/${dd}/${yyyy} ${hh}:${mi}:${ss}`;
-    }
+}
+
+function getChemicalName(prefix) {
+  var prefixMap = {
+    "DDAC": "DDAC",
+    "DDACX": "DDAC",
+    "TRI": "Triacetin",
+    "CA50": "Caustic50",
+    "CA25": "Caustic25",
+    "HP34": "HP34",
+    "GQ2510": "Glut Quat 35",
+    "TSI2115M": "Scale TSI-2115M",
+    "TSI2120M": "Scale TSI-2120M",
+    "TSI2315M": "Scale TSI-2315M",
+    "GQ2512": "Glut Quat 35"
+  };
+
+  return prefixMap[prefix] || prefix; // Return prefix if not found in the map
+}
+
+
+
