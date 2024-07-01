@@ -1,4 +1,4 @@
-//Revision 24/06/2024 - Fishbowl inventory code 
+//Revision 01/07/2024 - Fishbowl inventory code updated
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
