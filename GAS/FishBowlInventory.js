@@ -224,7 +224,8 @@ function compareInventories(dbData, jobCode) {
     Object.keys(latestActiveInventory).forEach(toteIdentifier => {
         if (!dbToteIdentifiers.has(toteIdentifier)) {
             var activeRow = latestActiveInventory[toteIdentifier];
-            var chemicalName = toteIdentifier.split('-')[0];  // Extract chemical name from tote identifier
+            var prefix = toteIdentifier.split('-')[0];  // Extract prefix from tote identifier
+            var chemicalName = getChemicalName(prefix);  // Get chemical name from prefix
             var job = jobCode;
             var firstSeen = firstSeenMap[toteIdentifier] ? formatDateTime(firstSeenMap[toteIdentifier].date) : '';
             var lastSeen = lastSeenMap[toteIdentifier] ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
