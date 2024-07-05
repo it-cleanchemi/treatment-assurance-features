@@ -1,5 +1,5 @@
 /**
- Version 7/05/2024 - Chemical map
+ Version 7/05/2024 - quantities are fixed for partial totes whicha re not in Fishbowl.
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -228,10 +228,11 @@ function compareInventories(dbData, jobCode) {
             var chemicalName = getChemicalName(prefix);  // Get chemical name from prefix
             var job = jobCode;
             var firstSeen = firstSeenMap[toteIdentifier] ? formatDateTime(firstSeenMap[toteIdentifier].date) : '';
+            var activeInventoryQuantity = latestActiveInventory[toteIdentifier] ? parseFloat(latestActiveInventory[toteIdentifier][9]) : "";
             var lastSeen = lastSeenMap[toteIdentifier] ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
             var originalQuantity = firstSeenMap[toteIdentifier] ? firstSeenMap[toteIdentifier].originalQuantity : 0;
 
-            var rowData = [toteIdentifier, chemicalName, job, 0, firstSeen, lastSeen, "", originalQuantity, 0, 0, "", firstSeen, lastSeen];
+            var rowData = [toteIdentifier, chemicalName, job, 0, firstSeen, lastSeen, "", originalQuantity, activeInventoryQuantity, activeInventoryQuantity, "", firstSeen, lastSeen];
             comparisonData.push(rowData);
 
             tableRows += "<tr>";
@@ -316,16 +317,10 @@ function generateSummary(comparisonData) {
             };
         }
 
-         if (chemicalName === "Empty") {
-            chemicalSummary[chemicalName].emptyTotes++;
-        } else if (currentGallons === null) {
-            // Totes not started in active inventory but full in Fishbowl inventory
-            chemicalSummary[chemicalName].fullTotes++;
-            chemicalSummary[chemicalName].totalGallons += fBQuantity;
-        } else if (currentGallons === 0) {
+        if (currentGallons === 0) {
             // Empty totes
             chemicalSummary[chemicalName].emptyTotes++;
-        } else if (currentGallons === originalQuantity) {
+        } else if (currentGallons >= originalQuantity) {
             // Full totes
             chemicalSummary[chemicalName].fullTotes++;
             chemicalSummary[chemicalName].totalGallons += currentGallons;
@@ -345,6 +340,7 @@ function generateSummary(comparisonData) {
 
     return chemicalSummary;
 }
+
 function postToGoogleChat(chemicalSummary, jobName) {
   var chatWebhookUrl = WEBHOOK; //"https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg";
  var emptyTotesCount = 0;
