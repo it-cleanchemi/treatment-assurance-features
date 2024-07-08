@@ -435,7 +435,8 @@ function getChemicalName(prefix) {
     "TSI2315M": "Scale TSI-2315M",
     "GQ2512": "Glut Quat 35",
     "XDDAC":	"DDAC",
-    "M231120017": "CA50"
+    "M231120017": "CA50",
+    "NCA50":"CA50"
   };
 
   return prefixMap[prefix] || prefix; // Return prefix if not found in the map
