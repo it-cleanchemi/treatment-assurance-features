@@ -1,5 +1,5 @@
 /**
- Version 7/05/2024 - quantities are fixed for partial totes whicha re not in Fishbowl.
+ Version 7/08/2024 - Chemical map
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -151,6 +151,8 @@ function compareInventories(dbData, jobCode) {
     var latestActiveInventory = {};
     var firstSeenMap = {};
     var lastSeenMap = {};
+    var toteDeliveryMap = {};
+
     activeInventoryData.forEach(function(row) {
         var toteIdentifier = row[5];
         var date = new Date(row[0]); // Assuming the date is in the first column
@@ -163,9 +165,15 @@ function compareInventories(dbData, jobCode) {
             } else if (date < firstSeenMap[toteIdentifier].date) {
                 firstSeenMap[toteIdentifier] = { date: date, originalQuantity: originalQuantity };
             }
-        }
 
-        lastSeenMap[toteIdentifier] = date;
+            // Update lastSeenMap only if row[2] does not contain "Delivery"
+            lastSeenMap[toteIdentifier] = date;
+        }else {
+            // Update toteDeliveryMap for deliveries
+            if (!toteDeliveryMap[toteIdentifier]) {
+                toteDeliveryMap[toteIdentifier] = { date: date, originalQuantity: originalQuantity };
+            }
+        }
 
         if (!latestActiveInventory[toteIdentifier]) {
             latestActiveInventory[toteIdentifier] = row;
@@ -177,6 +185,9 @@ function compareInventories(dbData, jobCode) {
         }
     });
 
+    
+    
+    
     // Prepare the comparison data array
     var comparisonData = [];
     var tableRows = "";
@@ -230,9 +241,11 @@ function compareInventories(dbData, jobCode) {
             var firstSeen = firstSeenMap[toteIdentifier] ? formatDateTime(firstSeenMap[toteIdentifier].date) : '';
             var activeInventoryQuantity = latestActiveInventory[toteIdentifier] ? parseFloat(latestActiveInventory[toteIdentifier][9]) : "";
             var lastSeen = lastSeenMap[toteIdentifier] ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
-            var originalQuantity = firstSeenMap[toteIdentifier] ? firstSeenMap[toteIdentifier].originalQuantity : 0;
+            var originalQuantity = toteDeliveryMap[toteIdentifier] ? toteDeliveryMap[toteIdentifier].originalQuantity : 0;
+            var toteNameForList = "";
+            if(activeInventoryQuantity != 0){toteNameForList = toteIdentifier};
 
-            var rowData = [toteIdentifier, chemicalName, job, 0, firstSeen, lastSeen, "", originalQuantity, activeInventoryQuantity, activeInventoryQuantity, "", firstSeen, lastSeen];
+            var rowData = [toteIdentifier, chemicalName, job, 0, firstSeen, lastSeen, "", originalQuantity, activeInventoryQuantity, activeInventoryQuantity, toteNameForList, firstSeen, lastSeen];
             comparisonData.push(rowData);
 
             tableRows += "<tr>";
@@ -340,7 +353,6 @@ function generateSummary(comparisonData) {
 
     return chemicalSummary;
 }
-
 function postToGoogleChat(chemicalSummary, jobName) {
   var chatWebhookUrl = WEBHOOK; //"https://chat.googleapis.com/v1/spaces/AAAApEyy8XY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cc0XVeeTaP9QLBbrDecNG76cqBxHppp_SAROy6MTAvg";
  var emptyTotesCount = 0;
@@ -422,7 +434,8 @@ function getChemicalName(prefix) {
     "TSI2120M": "Scale TSI-2120M",
     "TSI2315M": "Scale TSI-2315M",
     "GQ2512": "Glut Quat 35",
-    "XDDAC":	"DDAC"
+    "XDDAC":	"DDAC",
+    "M231120017": "CA50"
   };
 
   return prefixMap[prefix] || prefix; // Return prefix if not found in the map
