@@ -1,5 +1,5 @@
 /**
- Version 7/08/2024 - Chemical map
+ Version 7/09/2024 - Chemical map
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -243,9 +243,14 @@ function compareInventories(dbData, jobCode) {
             var lastSeen = lastSeenMap[toteIdentifier] ? formatDateTime(lastSeenMap[toteIdentifier]) : '';
             var originalQuantity = toteDeliveryMap[toteIdentifier] ? toteDeliveryMap[toteIdentifier].originalQuantity : 0;
             var toteNameForList = "";
+            var finalReport = "";
+            
+            if(activeInventoryQuantity===0){
+              finalReport = lastSeen
+            }
             if(activeInventoryQuantity != 0){toteNameForList = toteIdentifier};
 
-            var rowData = [toteIdentifier, chemicalName, job, 0, firstSeen, lastSeen, "", originalQuantity, activeInventoryQuantity, activeInventoryQuantity, toteNameForList, firstSeen, lastSeen];
+            var rowData = [toteIdentifier, chemicalName, job, 0, firstSeen, lastSeen, "", originalQuantity, activeInventoryQuantity, activeInventoryQuantity, toteNameForList, firstSeen, finalReport];
             comparisonData.push(rowData);
 
             tableRows += "<tr>";
@@ -441,6 +446,4 @@ function getChemicalName(prefix) {
 
   return prefixMap[prefix] || prefix; // Return prefix if not found in the map
 }
-
-
 
