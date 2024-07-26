@@ -51,11 +51,11 @@ function updateConsumption() {
     var emailSubject = jobName +" Consumption Report";
     var emailBody = `Dear Team,<br><br>Please find below the inventory differences report for ${jobName}:<br><br>` + htmlContent + `<br><br>Best Regards,<br>Your Automated System`;
 
-    MailApp.sendEmail({
-        to: emailRecipient,
-        subject: emailSubject,
-        htmlBody: emailBody
-    });
+    //MailApp.sendEmail({
+    //    to: emailRecipient,
+    //    subject: emailSubject,
+    //    htmlBody: emailBody
+    //});
 
     // Generate summary from comparisonData
     var summary = generateSummary(comparisonData.rows);
@@ -441,7 +441,8 @@ function getChemicalName(prefix) {
     "GQ2512": "Glut Quat 35",
     "XDDAC":	"DDAC",
     "M231120017": "CA50",
-    "NCA50":"CA50"
+    "NCA50":"CA50",
+    "B":"HP34"
   };
 
   return prefixMap[prefix] || prefix; // Return prefix if not found in the map
