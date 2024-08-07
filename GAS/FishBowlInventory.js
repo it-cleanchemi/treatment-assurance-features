@@ -438,7 +438,7 @@ function getChemicalName(prefix) {
     "TSI2115M": "Scale TSI-2115M",
     "TSI2120M": "Scale TSI-2120M",
     "TSI2315M": "Scale TSI-2315M",
-    "GQ2512": "Glut Quat 35",
+    "GQ2512": "Glut Quat 37",
     "XDDAC":	"DDAC",
     "M231120017": "CA50",
     "NCA50":"CA50",
