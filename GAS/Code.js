@@ -1,4 +1,4 @@
-//Revision 01/07/2024 - Fishbowl inventory code updated
+//Revision 8/20/2024 - Fishbowl inventory code updated Empty Totes fix
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");

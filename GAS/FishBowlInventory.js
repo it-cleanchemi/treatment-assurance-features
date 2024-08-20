@@ -1,5 +1,5 @@
 /**
- Version 7/09/2024 - Chemical map
+ Version 8/20/2024 - Empty totes fix
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -134,7 +134,11 @@ function fetchCurrentInventory(jobCode) {
     stmt.close();
     conn.close();
 
-    return data;
+    var filteredData = data.filter(function(row) {
+        return row[0] !== null; // Check if the first column (index 0) is not null
+     });
+    
+     return filteredData;
 }
 
 function compareInventories(dbData, jobCode) {
