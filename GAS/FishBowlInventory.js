@@ -30,7 +30,10 @@ function updateConsumption() {
 
     // Fetch data from the database
     var dbData = fetchCurrentInventory(jobCode);
-
+    if (dbData===-1){
+        Browser.msgBox("Logistics server is down, try to sync inventory later.");
+        return;
+    }
     // Compare inventories and prepare comparison data
     var comparisonData = compareInventories(dbData,jobCode);
     
@@ -68,77 +71,90 @@ function updateConsumption() {
 
 function fetchCurrentInventory(jobCode) {
   
+    try {
+        var url = 'jdbc:mysql://' + address + ':' + port + '/' + dbName;
+        var conn = Jdbc.getConnection(url, username, password);
+        var stmt = conn.createStatement();
 
-    var url = 'jdbc:mysql://' + address + ':' + port + '/' + dbName;
-    var conn = Jdbc.getConnection(url, username, password);
-    var stmt = conn.createStatement();
-
-    var query = `
-        WITH MaxRecord AS (
+        var query = `
+            WITH MaxRecord AS (
+                SELECT
+                    info,
+                    MAX(recordid) AS max_recordid
+                FROM
+                    trackinginfo
+                GROUP BY
+                    info
+            )
             SELECT
-                info,
-                MAX(recordid) AS max_recordid
-            FROM
-                trackinginfo
-            GROUP BY
-                info
-        )
-        SELECT
-            tt.info AS LotInfo,
-            p.description AS PartDescription,
-            l.name AS LocationName,
-            SUM(t.qty) AS TotalQuantity,
-            MAX(t.dateCreated) AS dateCreated,
-            t.dateLastModified AS lastCount,
-            t.id AS id,
-            ti.qty AS OriginalQuantity
-        FROM 
-            tag t
-        JOIN 
-            location l ON t.locationId = l.id
-        JOIN 
-            part p ON t.partId = p.id
-        LEFT JOIN 
-            trackingtext tt ON t.id = tt.tagId
-        LEFT JOIN
-            MaxRecord mr ON tt.info = mr.info
-        LEFT JOIN
-            trackinginfo ti ON tt.info = ti.info AND ti.recordid = mr.max_recordid
-        WHERE
-            l.name = '${jobCode}'
-        GROUP BY 
-            tt.info, p.description, l.name, t.id, ti.qty
-        ORDER BY 
-            p.description, l.name;
-    `;
+                tt.info AS LotInfo,
+                p.description AS PartDescription,
+                l.name AS LocationName,
+                SUM(t.qty) AS TotalQuantity,
+                MAX(t.dateCreated) AS dateCreated,
+                t.dateLastModified AS lastCount,
+                t.id AS id,
+                ti.qty AS OriginalQuantity
+            FROM 
+                tag t
+            JOIN 
+                location l ON t.locationId = l.id
+            JOIN 
+                part p ON t.partId = p.id
+            LEFT JOIN 
+                trackingtext tt ON t.id = tt.tagId
+            LEFT JOIN
+                MaxRecord mr ON tt.info = mr.info
+            LEFT JOIN
+                trackinginfo ti ON tt.info = ti.info AND ti.recordid = mr.max_recordid
+            WHERE
+                l.name = '${jobCode}'
+            GROUP BY 
+                tt.info, p.description, l.name, t.id, ti.qty
+            ORDER BY 
+                p.description, l.name;
+        `;
 
-    var rs = stmt.executeQuery(query);
-    var data = [];
-    var columnCount = rs.getMetaData().getColumnCount();
-    var columnNames = [];
+        var rs = stmt.executeQuery(query);
+        var data = [];
+        var columnCount = rs.getMetaData().getColumnCount();
+        var columnNames = [];
 
-    for (var j = 1; j <= columnCount; j++) {
-        columnNames.push(rs.getMetaData().getColumnName(j));
-    }
-    data.push(columnNames);
-
-    while (rs.next()) {
-        var rowData = [];
-        for (var k = 1; k <= columnCount; k++) {
-            rowData.push(rs.getString(k));
+        for (var j = 1; j <= columnCount; j++) {
+            columnNames.push(rs.getMetaData().getColumnName(j));
         }
-        data.push(rowData);
+        data.push(columnNames);
+
+        while (rs.next()) {
+            var rowData = [];
+            for (var k = 1; k <= columnCount; k++) {
+                rowData.push(rs.getString(k));
+            }
+            data.push(rowData);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        var filteredData = data.filter(function(row) {
+            return row[0] !== null; // Check if the first column (index 0) is not null
+        });
+        
+        return filteredData;
+    }catch(e){
+        Logger.log("Error connecting to the database or executing the query: " + e.message);
+        var eReturn = -1
+        return eReturn;
+    } finally {
+        if (conn) {
+            try {
+                conn.close();
+            } catch (e) {
+                Logger.log("Error closing the connection: " + e.message);
+            }
+        }
     }
-
-    rs.close();
-    stmt.close();
-    conn.close();
-
-    var filteredData = data.filter(function(row) {
-        return row[0] !== null; // Check if the first column (index 0) is not null
-     });
-    
-     return filteredData;
 }
 
 function compareInventories(dbData, jobCode) {
