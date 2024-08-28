@@ -1,5 +1,5 @@
 /**
- Version 8/20/2024 - Empty totes fix
+ Version 8/28/2024 - Server down error handling
 
 Edited by v.martysevich@cleanchemi.com
 
