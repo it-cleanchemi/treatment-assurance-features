@@ -290,7 +290,8 @@ function compareInventories(dbData, jobCode) {
     dbData.slice(1).forEach(function(row) {
         var toteIdentifier = row[0];
         if (!latestActiveInventory[toteIdentifier]) {
-            var chemicalName = toteIdentifier.split('-')[0];  // Extract chemical name from tote identifier
+            var chemPrefix = toteIdentifier.split('-')[0];
+            var chemicalName = getChemicalName(chemPrefix)  // Extract chemical name from tote identifier
             var currentTime = new Date();
             var ampm = currentTime.getHours() >= 12 ? "Delivery PM" : "Delivery AM";
             var time = currentTime.getHours().toString().padStart(2, '0') + ":" + currentTime.getMinutes().toString().padStart(2, '0');
