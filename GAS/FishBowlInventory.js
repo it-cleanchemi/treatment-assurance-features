@@ -1,5 +1,5 @@
 /**
- Version 8/28/2024 - Server down error handling
+ Version 9/27/2024 - Centralized chemical mapping
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -448,24 +448,26 @@ function formatDateTime(date) {
 }
 
 function getChemicalName(prefix) {
-  var prefixMap = {
-    "DDAC": "DDAC",
-    "DDACX": "DDAC",
-    "TRI": "Triacetin",
-    "CA50": "CA50",
-    "CA25": "CA25",
-    "HP34": "HP34",
-    "GQ2510": "Glut Quat 35",
-    "TSI2115M": "Scale TSI-2115M",
-    "TSI2120M": "Scale TSI-2120M",
-    "TSI2315M": "Scale TSI-2315M",
-    "GQ2512": "Glut Quat 37",
-    "XDDAC":	"DDAC",
-    "M231120017": "CA50",
-    "NCA50":"CA50",
-    "B":"HP34"
-  };
+  // if (!prefix) {prefix="CA50"}; Debugging
+  
+  var spreadsheetId = '1WWm9KFEU2ROG60TeorZxD3f6-C9FdP4VYR8g2udIpug';
+  var sheetName = 'Chemical Mapping';
+  
+  // Open the spreadsheet and sheet
+  var sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
+  
+  // Get the range of data (assuming data starts at A1 and has two columns)
+  var dataRange = sheet.getRange(2, 1, sheet.getLastRow(), 2);
+  var data = dataRange.getValues();
 
-  return prefixMap[prefix] || prefix; // Return prefix if not found in the map
+  // Search for the prefix in the sheet
+  for (var i = 0; i < data.length; i++) {
+    if (data[i][0] === prefix) {
+      return data[i][1];  // Return the chemical name if the prefix is found
+    }
+  }
+
+  // If no match is found, return the prefix as a fallback
+  return prefix;
 }
 

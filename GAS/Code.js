@@ -1,4 +1,4 @@
-//Revision 8/20/2024 - Fishbowl inventory code updated Empty Totes fix
+//Revision 9/27/2024 - Centralized chemical mapping
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
