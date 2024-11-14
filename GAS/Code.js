@@ -1,4 +1,5 @@
-//Revision 9/27/2024 - Centralized chemical mapping
+// Version 11/14/2024 - Centralized Database Access + retreaving Script ID function
+
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
 var activeCell = TA.getActiveCell(); //TA.getRange("B84");
@@ -9,6 +10,15 @@ var headerRange = TA.getRange(1, 1, 1, TA.getLastColumn());
 var headerValues = headerRange.getValues()[0];
 const SS = SpreadsheetApp.getActiveSpreadsheet();
 const WEBHOOK = SS.getSheetByName('Reference').getRange("L2").getValues();
+
+function getMyScriptID(){
+  var scriptId = ScriptApp.getScriptId();
+  var fileName = SpreadsheetApp.getActiveSpreadsheet().getName();
+  var catalog = SpreadsheetApp.openById('11rSFXUgOMJ93GPv9qxlpoYupGksOAv1EgdMs9FnHSus')
+  var iDList = catalog.getSheetByName('Script Auto Catalog');
+  
+  iDList.appendRow([fileName, scriptId || 'No Script ID']);
+} 
 
 function sendREPORT() {
     var reportSentColumnIndex = headerValues.indexOf("Report Sent") + 1;
@@ -362,6 +372,7 @@ function getLastDataRowInColumn(sheet, column) {
 
 
 function postRigUpCheck(){
+  getMyScriptID();
   var RIG = SS.getSheetByName('Rig-UP Check');
   var TAname = SS.getName();
   var JobCode = TAname.split(" ")[0];

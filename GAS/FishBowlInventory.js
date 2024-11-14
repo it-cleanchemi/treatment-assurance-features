@@ -1,5 +1,5 @@
 /**
- Version 9/27/2024 - Centralized chemical mapping
+ Version 11/14/2024 - Centralized Database Access + retreaving Script ID function
 
 Edited by v.martysevich@cleanchemi.com
 
@@ -12,12 +12,16 @@ The script will:
  * 
  * **/
 
-const address = '12.228.204.226';
-const port = '3305';
-const dbName = 'Clean_Chemi';
-const username = 'cc_viewer';
-const password = 'Cleanchemi!1';
-const emailRecipient = "v.martysevich@cleanchemi.com, l.lee@cleanchemi.com, c.dreher@cleanchemi.com, t.nutz@cleanchemi.com";
+ 
+const dashboardID = '1WWm9KFEU2ROG60TeorZxD3f6-C9FdP4VYR8g2udIpug';
+const mappingSheet = 'Chemical Mapping';
+const dashBoard = SpreadsheetApp.openById(dashboardID).getSheetByName(mappingSheet);
+const address = dashBoard.getRange('D2').getValue();
+const port = dashBoard.getRange('D3').getValue();
+const dbName = dashBoard.getRange('D4').getValue();
+const username = dashBoard.getRange('D5').getValue();
+const password = dashBoard.getRange('D6').getValue();
+const emailRecipient = dashBoard.getRange('D7').getValue();
 
 function updateConsumption() {
     const sheet = SS.getSheetByName("Fishbowl Inventory");
@@ -448,16 +452,10 @@ function formatDateTime(date) {
 }
 
 function getChemicalName(prefix) {
-  // if (!prefix) {prefix="CA50"}; Debugging
-  
-  var spreadsheetId = '1WWm9KFEU2ROG60TeorZxD3f6-C9FdP4VYR8g2udIpug';
-  var sheetName = 'Chemical Mapping';
-  
-  // Open the spreadsheet and sheet
-  var sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
-  
+  if (!prefix) {prefix="CA50"}; //Debugging
+      
   // Get the range of data (assuming data starts at A1 and has two columns)
-  var dataRange = sheet.getRange(2, 1, sheet.getLastRow(), 2);
+  var dataRange = dashBoard.getRange(2, 1, dashBoard.getLastRow(), 2);
   var data = dataRange.getValues();
 
   // Search for the prefix in the sheet
