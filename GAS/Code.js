@@ -1,4 +1,4 @@
-// Version 11/14/2024 - Centralized Database Access + retreaving Script ID function
+// Version 12/5/2024 - Multiple Pmax dosage handling in Shift report
 
 
 var TA = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Treatment Assurance Reporting');
