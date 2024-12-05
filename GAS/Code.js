@@ -144,6 +144,7 @@ function postShiftReport() {
     var stagesInShift = 0;
     var shiftBarrels = 0;
     var pMaxDose = 0;
+    let pMaxDoseCount = 0;
     var dDACDose = 0;
     var scaleDose = 0;
     var preORP = 0;
@@ -163,8 +164,9 @@ function postShiftReport() {
             if (currentheader.includes("Total BBLs Treated per stage") || currentheader.includes("Total Treated")) {
                 shiftBarrels = shiftBarrels + shiftReportValues[i][j];
             }
-            if (currentheader.includes("PMAX Dose (PPM)") & shiftReportValues[i][j] > 0) {
-                pMaxDose = pMaxDose + shiftReportValues[i][j];
+            if (currentheader.includes("PMAX Dose (PPM)") && shiftReportValues[i][j] > 0) {
+              pMaxDose += shiftReportValues[i][j]; // Add the value to the sum
+              pMaxDoseCount++; // Increment the count
             }
             if (currentheader.includes("DDAC Dose (PPM)") & shiftReportValues[i][j] > 0) {
                 dDACDose = dDACDose + shiftReportValues[i][j];
@@ -194,7 +196,7 @@ function postShiftReport() {
             }
         }
     }
-    pMaxDose = pMaxDose / numRows;
+    pMaxDose = pMaxDose / pMaxDoseCount;
     pMaxDose = pMaxDose.toFixed(1);
     if (dDACDose > 0) {
         dDACDose = dDACDose / numRows;
@@ -309,6 +311,7 @@ function postShiftReport() {
     UrlFetchApp.fetch(url, options);
  // weatherTrigger(); //triggers weather check with 1 hour delay.
 }
+
 function sendMessage_(webhook, message) {
     // Sends the message text to the given webhook URL
     var user = Session.getActiveUser().getEmail()
